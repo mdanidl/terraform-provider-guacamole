@@ -3,13 +3,13 @@ package main
 import (
         "github.com/hashicorp/terraform/plugin"
 		"github.com/hashicorp/terraform/terraform"
-		"github.com/terraform-providers/terraform-provider-guacamole/guacamole"
+		"github.com/mdanidl/terraform-provider-guacamole/guacamole"
 )
 
 func main() {
         plugin.Serve(&plugin.ServeOpts{
                 ProviderFunc: func() terraform.ResourceProvider {
-                        return Provider()
+                        return guacamole.Provider()
                 },
         })
 }

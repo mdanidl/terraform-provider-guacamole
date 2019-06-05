@@ -1,7 +1,7 @@
 package guacamole
 
 import (
-		"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func Provider() *schema.Provider {
@@ -10,20 +10,24 @@ func Provider() *schema.Provider {
                         "url": {
                                 Type: schema.TypeString,
                                 Required: true,
+                                DefaultFunc: schema.EnvDefaultFunc("GUACAMOLE_URL", nil),
+                                Description: "",
+                        },
+                        "user": {
+                                Type: schema.TypeString,
+                                Required: true,
+                                DefaultFunc: schema.EnvDefaultFunc("GUACAMOLE_USER", nil),
+                                Description: "",
+                        },
+                        "password": {
+                                Type: schema.TypeString,
+                                Required: true,
+                                DefaultFunc: schema.EnvDefaultFunc("GUACAMOLE_PASSWORD", nil),
                                 Description: "",
                         },
                 },
-                ResourcesMap: map[string]*schema.Resource{},
+                ResourcesMap: map[string]*schema.Resource{
+                        "guacamole_user" : resourceUser(),
+                },
         }
 }
-
-
-// func Provider() terraform.ResourceProvider {
-// return &schema.Provider{
-//         Schema: map[string]*schema.Schema{
-//                 "address": {
-//                         Type:        schema.TypeString,
-//                         Required:    true,
-//                         DefaultFunc: schema.EnvDefaultFunc("VAULT_ADDR", nil),
-//                         Description: "URL of the root of the target Vault server    .",
-//                 },
