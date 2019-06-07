@@ -1,0 +1,30 @@
+INSERT INTO guacamole_connection_parameter (
+            connection_id,
+            parameter_name,
+            parameter_value
+        )
+        VALUES
+
+                ('2',
+                 'security',
+                 'any')
+             ,
+                ('2',
+                 'password',
+                 'testing')
+             ,
+                ('2',
+                 'hostname',
+                 'testing')
+             ,
+                ('2',
+                 'ignore-cert',
+                 'true')
+             ,
+                ('2',
+                 'port',
+                 '3389')
+             ,
+                ('2',
+                 'username',
+                 'testing')
