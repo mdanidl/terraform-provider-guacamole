@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  mysql:
+    build: ./mysql
+    ports:
+      - "3306:3306"
+    networks: 
+      db:
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  gserver:
+    image: guacamole/guacd
+    networks:
+      gserver:
+    depends_on:
+      - mysql    
+  gclient:
+    image: guacamole/guacamole
+    depends_on:  
+      - mysql
+    ports:
+      - "8088:8080"
+    environment:
+      GUACD_HOSTNAME: gserver
+      MYSQL_HOSTNAME: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      db:
+      gserver: 
+
+volumes:
+  mysql_data:
+
+networks:
+  db:
+  gserver:  
+
