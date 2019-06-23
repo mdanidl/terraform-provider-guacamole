@@ -30,7 +30,9 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"guacamole_user": resourceUser(),
+			"guacamole_user":                        resourceUser(),
+			"guacamole_connection":                  resourceConnection(),
+			"guacamole_user_connection_permissions": resourceUserConnectionPermissions(),
 		},
 		ConfigureFunc: providerConfigure,
 	}

@@ -19,20 +19,20 @@ func resourceUser() *schema.Resource {
 			"username": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 			"password": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+				Type:      schema.TypeString,
+				Required:  true,
+				Sensitive: true,
 			},
-			"attributes": {
-				Type:     schema.TypeMap,
+			"full_name": &schema.Schema{
+				Type:     schema.TypeString,
 				Optional: true,
-				Computed: true,
-				// Elem: &schema.Schema{
-				// 	Type:     schema.TypeMap,
-				// 	Optional: true,
-				// 	Elem:     schema.TypeString,
-				// },
+			},
+			"role": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
 			},
 		},
 	}
@@ -40,9 +40,14 @@ func resourceUser() *schema.Resource {
 
 func resourceUserCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*guacapi.Guac)
+
 	user := &guactypes.GuacUser{
 		Username: d.Get("username").(string),
 		Password: d.Get("password").(string),
+		Attributes: guactypes.GuacUserAttributes{
+			GuacFullName:           d.Get("full_name").(string),
+			GuacOrganizationalRole: d.Get("role").(string),
+		},
 	}
 	resp, err := client.CreateUser(user)
 	if err != nil {
@@ -61,7 +66,8 @@ func resourceUserRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("Error reading user %s", err)
 	}
 	d.Set("username", resp.Username)
-	d.Set("attributes", resp.Attributes)
+	d.Set("full_name", resp.Attributes.GuacFullName)
+	d.Set("role", resp.Attributes.GuacOrganizationalRole)
 
 	return nil
 }
@@ -70,6 +76,10 @@ func resourceUserUpdate(d *schema.ResourceData, meta interface{}) error {
 	user := &guactypes.GuacUser{
 		Username: d.Get("username").(string),
 		Password: d.Get("password").(string),
+		Attributes: guactypes.GuacUserAttributes{
+			GuacFullName:           d.Get("full_name").(string),
+			GuacOrganizationalRole: d.Get("role").(string),
+		},
 	}
 	err := client.UpdateUser(user)
 	if err != nil {
